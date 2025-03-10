@@ -3,7 +3,9 @@
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+
 import type { Chapter } from "@/lib/chapters"
+import { sectionTitles } from "@/lib/utils";
 
 interface SectionNavProps {
   activeSection: string
@@ -22,14 +24,7 @@ export function SectionNav({
   prevChapter,
   nextChapter,
 }: SectionNavProps) {
-  const sections = [
-    { id: "what", label: "What" },
-    { id: "how", label: "How" },
-    { id: "why", label: "Why" },
-    { id: "sequence", label: "Order" },
-    { id: "format", label: "Format" },
-    { id: "formatHelps", label: "Why Format" },
-  ]
+  const sections = Object.entries(sectionTitles).map(([id, label]) => ({ id, label }));
 
   // Function to truncate text with ellipsis
   const truncate = (text: string, maxLength: number) => {

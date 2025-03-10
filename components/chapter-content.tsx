@@ -9,6 +9,8 @@ import { CheckCircle, ChevronRight, ChevronLeft } from "lucide-react"
 import { SectionNav } from "@/components/section-nav"
 import { useTheme } from "next-themes"
 
+import { sectionTitles } from "@/lib/utils";
+
 interface ChapterContentProps {
   chapter: Chapter
   isCompleted: boolean
@@ -35,7 +37,7 @@ export function ChapterContent({
   const whyRef = useRef<HTMLDivElement>(null)
   const sequenceRef = useRef<HTMLDivElement>(null)
   const formatRef = useRef<HTMLDivElement>(null)
-  const formatHelpsRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
 
   const handleSectionChange = (section: string) => {
     setActiveSection(section)
@@ -46,48 +48,79 @@ export function ChapterContent({
       how: howRef,
       why: whyRef,
       sequence: sequenceRef,
-      format: formatRef,
-      formatHelps: formatHelpsRef,
+      format: formatRef
     }
 
     const ref = refs[section]
     if (ref && ref.current) {
       // Add a small offset to account for sticky header
-      const yOffset = -130
+      const yOffset = -140
       const y = ref.current.getBoundingClientRect().top + window.pageYOffset + yOffset
       window.scrollTo({ top: y, behavior: "smooth" })
     }
   }
 
-  // Update active section based on scroll position
+  // Update active section based on scroll position - simplified consistent approach
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 160 // Add offset for better detection
-
-      const refs: Array<{ id: string; ref: React.RefObject<HTMLDivElement | null> }> = [
+      // Sticky header height - adjust this value to match your header height
+      const stickyHeaderOffset = 140
+      
+      // Get all section refs in order
+      const sections = [
         { id: "what", ref: whatRef },
         { id: "how", ref: howRef },
         { id: "why", ref: whyRef },
         { id: "sequence", ref: sequenceRef },
-        { id: "format", ref: formatRef },
-        { id: "formatHelps", ref: formatHelpsRef },
+        { id: "format", ref: formatRef }
       ]
-
-      // Find the last section that has been scrolled past
-      let currentSection = activeSection
-
-      for (const { id, ref } of refs) {
-        if (ref.current && ref.current.offsetTop <= scrollPosition) {
-          currentSection = id
+      
+      // Special case: check if we're at the bottom of the page
+      const viewportHeight = window.innerHeight
+      const scrollBottom = window.scrollY + viewportHeight
+      const isAtBottom = Math.ceil(scrollBottom) >= document.body.scrollHeight - 80
+      
+      if (isAtBottom) {
+        const lastSection = sections[sections.length - 1].id
+        if (activeSection !== lastSection) {
+          setActiveSection(lastSection)
+        }
+        return
+      }
+      
+      // Simple, reliable approach - find the topmost section that's above the middle of the sticky header
+      // This works for both scrolling up and down
+      let newActiveSection = sections[0].id // Default to first section
+      
+      for (let i = 0; i < sections.length; i++) {
+        const section = sections[i]
+        if (!section.ref.current) continue
+        
+        const rect = section.ref.current.getBoundingClientRect()
+        const sectionTopPosition = rect.top
+        
+        // If the section top is at or below our threshold, it's not the active section
+        // Unless it's the last section that's still partially visible
+        if (sectionTopPosition > stickyHeaderOffset && i > 0) {
+          newActiveSection = sections[i - 1].id
+          break
+        }
+        
+        // If we're on the last section, and it's at least partially visible
+        if (i === sections.length - 1 && sectionTopPosition <= stickyHeaderOffset) {
+          newActiveSection = section.id
         }
       }
-
-      if (currentSection !== activeSection) {
-        setActiveSection(currentSection)
+      
+      if (activeSection !== newActiveSection) {
+        setActiveSection(newActiveSection)
       }
     }
 
     window.addEventListener("scroll", handleScroll)
+    // Call once to set initial active section
+    handleScroll()
+    
     return () => window.removeEventListener("scroll", handleScroll)
   }, [activeSection])
 
@@ -96,6 +129,10 @@ export function ChapterContent({
       ? 'linear-gradient(to bottom, hsl(var(--background)) 70%, transparent 100%)' 
       : 'linear-gradient(to bottom, white 70%, transparent 100%)'
   }
+
+  // Get previous and next chapter names for sequence section
+  const prevChapterName = prevChapter ? `${prevChapter.number}. ${prevChapter.title}` : "None"
+  const nextChapterName = nextChapter ? `${nextChapter.number}. ${nextChapter.title}` : "None"
 
   return (
     <div className="chapter-container">
@@ -116,19 +153,19 @@ export function ChapterContent({
           </Button>
         </div>
       </div>
-      <div className="chapter-content space-y-12 pb-24 pt-6">
-        <section ref={whatRef} className="space-y-4">
-          <h3 className="text-2xl font-semibold">What</h3>
+      <div ref={contentRef} className="chapter-content space-y-12 pb-24 pt-6">
+        <section ref={whatRef} className="space-y-4 pb-10">
+          <h3 className="text-2xl font-semibold">{sectionTitles.what}</h3>
           <p className="text-muted-foreground leading-relaxed">{chapter.what}</p>
         </section>
 
-        <section ref={howRef} className="space-y-4">
-          <h3 className="text-2xl font-semibold">How</h3>
+        <section ref={howRef} className="space-y-4 pb-10">
+          <h3 className="text-2xl font-semibold">{sectionTitles.how}</h3>
           <p className="text-muted-foreground leading-relaxed">{chapter.how}</p>
         </section>
 
-        <section ref={whyRef} className="space-y-4">
-          <h3 className="text-2xl font-semibold">Why</h3>
+        <section ref={whyRef} className="space-y-4 pb-10">
+          <h3 className="text-2xl font-semibold">{sectionTitles.why}</h3>
           <p>{chapter.why.intro}</p>
           <ol className="space-y-6 list-decimal pl-6 mt-6">
             {chapter.why.whys.map((why, index) => (
@@ -144,18 +181,18 @@ export function ChapterContent({
           </div>
         </section>
 
-        <section ref={sequenceRef} className="space-y-4">
-          <h3 className="text-2xl font-semibold">Why It Comes After/Before</h3>
+        <section ref={sequenceRef} className="space-y-4 pb-10">
+          <h3 className="text-2xl font-semibold">{sectionTitles.sequence}</h3>
           <div className="space-y-6">
             {chapter.sequence.after && (
               <div>
-                <p className="font-medium">Why after:</p>
+                <p className="font-medium">Previous step: <em>"{prevChapterName}"</em></p>
                 <p className="text-muted-foreground mt-1">{chapter.sequence.after}</p>
               </div>
             )}
             {chapter.sequence.before && (
               <div>
-                <p className="font-medium">Why before:</p>
+                <p className="font-medium">Next step: <em>"{nextChapterName}"</em></p>
                 <p className="text-muted-foreground mt-1">{chapter.sequence.before}</p>
               </div>
             )}
@@ -163,7 +200,7 @@ export function ChapterContent({
         </section>
 
         <section ref={formatRef} className="space-y-4">
-          <h3 className="text-2xl font-semibold">What Format or Output Is Needed</h3>
+          <h3 className="text-2xl font-semibold">{sectionTitles.format}</h3>
           <ul className="space-y-2 list-disc pl-6">
             {chapter.format.outputs.map((output, index) => (
               <li key={index} className="text-muted-foreground">
@@ -171,8 +208,8 @@ export function ChapterContent({
               </li>
             ))}
           </ul>
-
-          <div ref={formatHelpsRef} className="mt-10 pt-6 border-t">
+        
+          <div className="mt-10 pt-6">
             <h4 className="text-xl font-semibold mb-4">Why This Format Helps and How</h4>
             <div className="space-y-6">
               <div>
@@ -186,6 +223,9 @@ export function ChapterContent({
             </div>
           </div>
         </section>
+
+        {/* Add spacer at the bottom to ensure last sections can be scrolled to fully */}
+        <div className="h-[30vh] pointer-events-none" aria-hidden="true"></div>
 
         <div className="flex justify-between pt-6">
           {prevChapter ? (
