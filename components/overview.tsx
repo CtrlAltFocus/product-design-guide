@@ -41,7 +41,7 @@ export function Overview({ completedChapters, onSelectChapter }: OverviewProps) 
 
           <div className="space-y-4">
             <p className="text-muted-foreground">
-              This guide walks you through a 12-step product design process tailored for solo founders. Each step
+              This guide walks you through a 12-step product design process tailored for new founders. Each step
               includes what to do, how to do it, and why it matters.
             </p>
 

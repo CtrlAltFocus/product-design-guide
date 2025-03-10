@@ -95,7 +95,7 @@ export function GuideLayout() {
           <div className="flex items-center justify-between flex-1">
             <div className="flex items-center gap-2">
               <BookOpen className="h-5 w-5 text-primary hidden sm:block" />
-              <h1 className="text-xl font-bold hidden md:block">Product Design Process for Solo Founders</h1>
+              <h1 className="text-xl font-bold hidden md:block">Product Design Process for New Founders</h1>
               <h1 className="text-lg font-bold hidden sm:block md:hidden">PDP Guide</h1>
               <h1 className="text-sm font-bold sm:hidden">PDP</h1>
             </div>

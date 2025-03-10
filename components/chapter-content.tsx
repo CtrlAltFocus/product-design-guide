@@ -65,7 +65,7 @@ export function ChapterContent({
     const handleScroll = () => {
       // Sticky header height - adjust this value to match your header height
       const stickyHeaderOffset = 140
-      
+
       // Get all section refs in order
       const sections = [
         { id: "what", ref: whatRef },
@@ -74,12 +74,12 @@ export function ChapterContent({
         { id: "sequence", ref: sequenceRef },
         { id: "format", ref: formatRef }
       ]
-      
+
       // Special case: check if we're at the bottom of the page
       const viewportHeight = window.innerHeight
       const scrollBottom = window.scrollY + viewportHeight
       const isAtBottom = Math.ceil(scrollBottom) >= document.body.scrollHeight - 80
-      
+
       if (isAtBottom) {
         const lastSection = sections[sections.length - 1].id
         if (activeSection !== lastSection) {
@@ -87,31 +87,31 @@ export function ChapterContent({
         }
         return
       }
-      
+
       // Simple, reliable approach - find the topmost section that's above the middle of the sticky header
       // This works for both scrolling up and down
       let newActiveSection = sections[0].id // Default to first section
-      
+
       for (let i = 0; i < sections.length; i++) {
         const section = sections[i]
         if (!section.ref.current) continue
-        
+
         const rect = section.ref.current.getBoundingClientRect()
         const sectionTopPosition = rect.top
-        
+
         // If the section top is at or below our threshold, it's not the active section
         // Unless it's the last section that's still partially visible
         if (sectionTopPosition > stickyHeaderOffset && i > 0) {
           newActiveSection = sections[i - 1].id
           break
         }
-        
+
         // If we're on the last section, and it's at least partially visible
         if (i === sections.length - 1 && sectionTopPosition <= stickyHeaderOffset) {
           newActiveSection = section.id
         }
       }
-      
+
       if (activeSection !== newActiveSection) {
         setActiveSection(newActiveSection)
       }
@@ -120,13 +120,13 @@ export function ChapterContent({
     window.addEventListener("scroll", handleScroll)
     // Call once to set initial active section
     handleScroll()
-    
+
     return () => window.removeEventListener("scroll", handleScroll)
   }, [activeSection])
 
   const gradientStyle = {
-    background: isDark 
-      ? 'linear-gradient(to bottom, hsl(var(--background)) 70%, transparent 100%)' 
+    background: isDark
+      ? 'linear-gradient(to bottom, hsl(var(--background)) 70%, transparent 100%)'
       : 'linear-gradient(to bottom, white 70%, transparent 100%)'
   }
 
@@ -186,13 +186,13 @@ export function ChapterContent({
           <div className="space-y-6">
             {chapter.sequence.after && (
               <div>
-                <p className="font-medium">Previous step: <em>"{prevChapterName}"</em></p>
+                <p className="font-medium">Previous step: <em>&ldquot;{prevChapterName}&rdquot;</em></p>
                 <p className="text-muted-foreground mt-1">{chapter.sequence.after}</p>
               </div>
             )}
             {chapter.sequence.before && (
               <div>
-                <p className="font-medium">Next step: <em>"{nextChapterName}"</em></p>
+                <p className="font-medium">Next step: <em>&ldquot;{nextChapterName}&rdquot;</em></p>
                 <p className="text-muted-foreground mt-1">{chapter.sequence.before}</p>
               </div>
             )}
@@ -208,7 +208,7 @@ export function ChapterContent({
               </li>
             ))}
           </ul>
-        
+
           <div className="mt-10 pt-6">
             <h4 className="text-xl font-semibold mb-4">Why This Format Helps and How</h4>
             <div className="space-y-6">

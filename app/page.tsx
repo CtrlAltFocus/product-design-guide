@@ -33,7 +33,7 @@ export default function Home() {
         <div className="container flex h-14 items-center justify-between">
           <div className="flex items-baseline gap-2">
             <h1 className="text-lg font-semibold tracking-tight">Product Design Process</h1>
-            <span className="text-sm text-muted-foreground">for Solo Founders</span>
+            <span className="text-sm text-muted-foreground">for New Founders</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="w-32 md:w-48">
@@ -50,7 +50,7 @@ export default function Home() {
         <div className="text-center space-y-4 mb-16 md:mb-24">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Product Design Process</h1>
           <p className="text-lg text-muted-foreground max-w-[800px] mx-auto">
-            A step-by-step guide for solo founders to design successful products with confidence, overcoming self-doubt,
+            A step-by-step guide for new founders to design successful products with confidence, overcoming self-doubt,
             perfectionism, and fear of failure.
           </p>
         </div>
