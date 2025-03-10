@@ -20,26 +20,6 @@ interface ChapterContentProps {
   nextChapter?: Chapter | null
 }
 
-// Add this custom hook to detect mobile viewport
-// Create this in: hooks/use-media-query.tsx
-// export const useMediaQuery = (query: string) => {
-//   const [matches, setMatches] = useState(false)
-//
-//   useEffect(() => {
-//     if (typeof window !== 'undefined') {
-//       const media = window.matchMedia(query)
-//       if (media.matches !== matches) {
-//         setMatches(media.matches)
-//       }
-//       const listener = () => setMatches(media.matches)
-//       media.addEventListener('change', listener)
-//       return () => media.removeEventListener('change', listener)
-//     }
-//   }, [matches, query])
-//
-//   return matches
-// }
-
 export function ChapterContent({
   chapter,
   isCompleted,
@@ -283,10 +263,6 @@ export function ChapterContent({
           <SectionNav
             activeSection={activeSection}
             onSectionChange={handleSectionChange}
-            chapter={chapter}
-            onNavigateChapter={onNavigate}
-            prevChapter={prevChapter}
-            nextChapter={nextChapter}
           />
         )}
       </div>
