@@ -10,18 +10,18 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { Search } from "@/components/search"
 
 export default function Home() {
-  const [completedChapters, setCompletedChapters] = useState<string[]>([])
-  const [progress, setProgress] = useState(0)
+  const [completedChapters, setCompletedChapters] = useState<string[]>([]);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     // Load progress from localStorage if available
-    const savedProgress = localStorage.getItem("pdp-guide-progress")
+    const savedProgress = localStorage.getItem("pdp-guide-progress");
     if (savedProgress) {
-      const parsed = JSON.parse(savedProgress)
-      setCompletedChapters(parsed)
-      setProgress((parsed.length / chapters.length) * 100)
+      const parsed = JSON.parse(savedProgress);
+      setCompletedChapters(parsed);
+      setProgress((parsed.length / chapters.length) * 100);
     }
-  }, [])
+  }, []);
 
   const selectChapter = (chapterId: string) => {
     window.location.href = `/guide?chapter=${chapterId}`
@@ -60,42 +60,44 @@ export default function Home() {
             const isCompleted = completedChapters.includes(chapter.id)
 
             return (
-              <div
-                key={chapter.id}
-                className={`group relative border rounded-lg p-6 transition-colors ${
-                  isCompleted ? "border-primary/50 bg-primary/5" : "hover:border-primary"
-                }`}
-              >
-                <div className="flex items-start gap-4">
-                  <div className="flex-none">
+              <Link href={`/guide?chapter=${chapter.id}`} key={chapter.id}>
+                <div
+                  className={`group relative border rounded-lg p-6 transition-colors ${
+                    isCompleted ? "border-primary/50 bg-primary/5" : "hover:border-primary"
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="flex-none">
+                      <div
+                        className={`flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium ${
+                          isCompleted ? "bg-primary text-primary-foreground group-hover:bg-blue-700" : "bg-muted group-hover:bg-gray-200"
+                        }`}
+                      >
+                        {chapter.number}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-lg font-semibold tracking-tight">{chapter.title}</h2>
+                        {isCompleted && <CheckCircle className="h-4 w-4 text-primary" />}
+                      </div>
+                      <p className="text-sm text-muted-foreground">{chapter.what}</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex items-center justify-between">
                     <div
-                      className={`flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium ${
-                        isCompleted ? "bg-primary text-primary-foreground" : "bg-muted"
-                      }`}
-                    >
-                      {chapter.number}
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <h2 className="text-lg font-semibold tracking-tight">{chapter.title}</h2>
-                      {isCompleted && <CheckCircle className="h-4 w-4 text-primary" />}
-                    </div>
-                    <p className="text-sm text-muted-foreground">{chapter.what}</p>
+                      className={`h-1.5 w-1.5 rounded-full ${isCompleted ? "bg-primary" : "bg-muted-foreground/0"}`}
+                    />
+
+                    <Button variant="ghost" className={`gap-2 text-sm hover:text-primary ${isCompleted ? "group-hover:bg-blue-100" : "group-hover:bg-gray-100"}`} asChild>
+                      <div>
+                        Read chapter
+                        <ChevronRight className="h-4 w-4" />
+                      </div>
+                    </Button>
                   </div>
                 </div>
-                <div className="mt-4 flex items-center justify-between">
-                  <div
-                    className={`h-1.5 w-1.5 rounded-full ${isCompleted ? "bg-primary" : "bg-muted-foreground/20"}`}
-                  />
-                  <Button variant="ghost" className="gap-2 text-sm" asChild>
-                    <Link href={`/guide?chapter=${chapter.id}`}>
-                      Read chapter
-                      <ChevronRight className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
-              </div>
+              </Link>
             )
           })}
         </div>
@@ -103,4 +105,3 @@ export default function Home() {
     </div>
   )
 }
-
