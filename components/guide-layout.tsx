@@ -83,41 +83,43 @@ export function GuideLayout() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center">
-          <div className="mr-4 flex">
-            <Link href="/" className="mr-2">
+        <div className="container flex h-14 items-center px-2 sm:px-6">
+          {/* Back button */}
+          <div className="mr-2 flex">
+            <Link href="/">
               <Button variant="ghost" size="icon">
                 <ArrowLeft className="h-5 w-5" />
                 <span className="sr-only">Back to home</span>
               </Button>
             </Link>
           </div>
+
+          {/* Ultra simplified mobile header */}
           <div className="flex items-center justify-between flex-1">
-            <div className="flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-primary hidden sm:block" />
-              <h1 className="text-xl font-bold hidden md:block">Product Design Process for New Founders</h1>
-              <h1 className="text-lg font-bold hidden sm:block md:hidden">PDP Guide</h1>
-              <h1 className="text-sm font-bold sm:hidden">PDP</h1>
-            </div>
-            <div className="flex items-center gap-4">
+            <div className="flex">
               <Link href="/">
-                <Button variant="ghost" size="sm" className="gap-2">
-                  <LayoutGrid className="h-4 w-4" />
-                  <span className="hidden sm:inline">All Chapters</span>
-                </Button>
+                <h1 className="text-sm sm:text-md font-medium">Product-design.guide</h1>
               </Link>
-              <div className="w-24 sm:w-32 md:w-48">
+            </div>
+
+            <div className="flex items-center gap-2 pr-1">
+              {/* Only show progress bar on larger screens */}
+              <div className="hidden sm:block sm:w-24 md:w-48">
                 <Progress value={progress} className="h-2" />
                 <p className="text-xs text-muted-foreground mt-1 text-center">{Math.round(progress)}% Complete</p>
               </div>
+
+              {/* Search is probably important to keep */}
               <Search onSelectChapter={selectChapter} />
+
+              {/* Theme toggle - keep this accessible */}
               <ThemeToggle />
             </div>
           </div>
         </div>
       </header>
 
-      <div className="container py-6">
+      <div className="container py-4 px-4 sm:px-6 sm:py-6">
         <div className="max-w-3xl mx-auto">
           <ChapterContent
             chapter={selectedChapter}
@@ -132,4 +134,3 @@ export function GuideLayout() {
     </div>
   )
 }
-

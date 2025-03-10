@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { CheckCircle, ChevronRight, ChevronLeft } from "lucide-react"
 import { SectionNav } from "@/components/section-nav"
 import { useTheme } from "next-themes"
-
+import { useMediaQuery } from "@/lib/hooks/use-media-query"
 import { sectionTitles } from "@/lib/utils";
 
 interface ChapterContentProps {
@@ -19,6 +19,26 @@ interface ChapterContentProps {
   prevChapter?: Chapter | null
   nextChapter?: Chapter | null
 }
+
+// Add this custom hook to detect mobile viewport
+// Create this in: hooks/use-media-query.tsx
+// export const useMediaQuery = (query: string) => {
+//   const [matches, setMatches] = useState(false)
+//
+//   useEffect(() => {
+//     if (typeof window !== 'undefined') {
+//       const media = window.matchMedia(query)
+//       if (media.matches !== matches) {
+//         setMatches(media.matches)
+//       }
+//       const listener = () => setMatches(media.matches)
+//       media.addEventListener('change', listener)
+//       return () => media.removeEventListener('change', listener)
+//     }
+//   }, [matches, query])
+//
+//   return matches
+// }
 
 export function ChapterContent({
   chapter,
@@ -31,6 +51,8 @@ export function ChapterContent({
   const [activeSection, setActiveSection] = useState<string>("what")
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === "dark"
+
+  const isMobile = useMediaQuery("(max-width: 460px)")
 
   const whatRef = useRef<HTMLDivElement>(null)
   const howRef = useRef<HTMLDivElement>(null)
@@ -136,12 +158,12 @@ export function ChapterContent({
 
   return (
     <div className="chapter-container">
-      <div className="sticky top-[50px] z-10 py-4 pb-10 -mb-5" style={gradientStyle}>
-        <div className="flex items-center justify-between">
-          <h2 className="text-3xl font-bold tracking-tight">
+      <div className="sticky top-[50px] z-10 py-4 pb-8 -mb-5" style={gradientStyle}>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
             {chapter.number}. {chapter.title}
           </h2>
-          <Button variant={isCompleted ? "outline" : "default"} onClick={onToggleComplete} className="gap-2">
+          <Button variant={isCompleted ? "outline" : "default"} onClick={onToggleComplete} className="gap-2 w-full sm:w-auto justify-center">
             {isCompleted ? (
               <>
                 <CheckCircle className="h-4 w-4" />
@@ -153,19 +175,19 @@ export function ChapterContent({
           </Button>
         </div>
       </div>
-      <div ref={contentRef} className="chapter-content space-y-12 pb-24 pt-6">
+      <div ref={contentRef} className="chapter-content space-y-12 pb-20 pt-4">
         <section ref={whatRef} className="space-y-4 pb-10">
-          <h3 className="text-2xl font-semibold">{sectionTitles.what}</h3>
+          <h3 className="text-xl sm:text-2xl font-semibold">{sectionTitles.what}</h3>
           <p className="text-muted-foreground leading-relaxed">{chapter.what}</p>
         </section>
 
         <section ref={howRef} className="space-y-4 pb-10">
-          <h3 className="text-2xl font-semibold">{sectionTitles.how}</h3>
+          <h3 className="text-xl sm:text-2xl font-semibold">{sectionTitles.how}</h3>
           <p className="text-muted-foreground leading-relaxed">{chapter.how}</p>
         </section>
 
         <section ref={whyRef} className="space-y-4 pb-10">
-          <h3 className="text-2xl font-semibold">{sectionTitles.why}</h3>
+          <h3 className="text-xl sm:text-2xl font-semibold">{sectionTitles.why}</h3>
           <p>{chapter.why.intro}</p>
           <ol className="space-y-6 list-decimal pl-6 mt-6">
             {chapter.why.whys.map((why, index) => (
@@ -182,7 +204,7 @@ export function ChapterContent({
         </section>
 
         <section ref={sequenceRef} className="space-y-4 pb-10">
-          <h3 className="text-2xl font-semibold">{sectionTitles.sequence}</h3>
+          <h3 className="text-xl sm:text-2xl font-semibold">{sectionTitles.sequence}</h3>
           <div className="space-y-6">
             {chapter.sequence.after && (
               <div>
@@ -200,7 +222,7 @@ export function ChapterContent({
         </section>
 
         <section ref={formatRef} className="space-y-4">
-          <h3 className="text-2xl font-semibold">{sectionTitles.format}</h3>
+          <h3 className="text-xl sm:text-2xl font-semibold">{sectionTitles.format}</h3>
           <ul className="space-y-2 list-disc pl-6">
             {chapter.format.outputs.map((output, index) => (
               <li key={index} className="text-muted-foreground">
@@ -210,7 +232,7 @@ export function ChapterContent({
           </ul>
 
           <div className="mt-10 pt-6">
-            <h4 className="text-xl font-semibold mb-4">Why This Format Helps and How</h4>
+            <h4 className="text-lg sm:text-xl font-semibold mb-4">Why This Format Helps and How</h4>
             <div className="space-y-6">
               <div>
                 <p className="font-medium">Why:</p>
@@ -227,32 +249,46 @@ export function ChapterContent({
         {/* Add spacer at the bottom to ensure last sections can be scrolled to fully */}
         <div className="h-[30vh] pointer-events-none" aria-hidden="true"></div>
 
-        <div className="flex justify-between pt-6">
-          {prevChapter ? (
-            <Button variant="outline" className="gap-2" onClick={() => onNavigate("previous")}>
-              <ChevronLeft className="h-4 w-4" />
-              Previous
-            </Button>
-          ) : (
-            <div></div>
-          )}
+        <div className="flex flex-col sm:flex-row justify-between pt-6 gap-3 sm:gap-0">
+          <div className="w-full sm:w-auto">
+            {prevChapter ? (
+              <Button
+                variant="outline"
+                className="gap-2 w-full justify-start overflow-hidden text-ellipsis"
+                onClick={() => onNavigate("previous")}
+              >
+                <ChevronLeft className="h-4 w-4 flex-shrink-0" />
+                <span className="truncate">{prevChapter.title}</span>
+              </Button>
+            ) : (
+              <div></div>
+            )}
+          </div>
 
-          {nextChapter && (
-            <Button className="gap-2" onClick={() => onNavigate("next")}>
-              Next
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          )}
+          <div className="w-full sm:w-auto flex justify-end">
+            {nextChapter && (
+              <Button
+                className="gap-2 w-full sm:w-auto justify-end overflow-hidden text-ellipsis"
+                onClick={() => onNavigate("next")}
+              >
+                <span className="truncate">{nextChapter.title}</span>
+                <ChevronRight className="h-4 w-4 flex-shrink-0" />
+              </Button>
+            )}
+          </div>
         </div>
 
-        <SectionNav
-          activeSection={activeSection}
-          onSectionChange={handleSectionChange}
-          chapter={chapter}
-          onNavigateChapter={onNavigate}
-          prevChapter={prevChapter}
-          nextChapter={nextChapter}
-        />
+        {/* Hide the section nav on mobile */}
+        {!isMobile && (
+          <SectionNav
+            activeSection={activeSection}
+            onSectionChange={handleSectionChange}
+            chapter={chapter}
+            onNavigateChapter={onNavigate}
+            prevChapter={prevChapter}
+            nextChapter={nextChapter}
+          />
+        )}
       </div>
     </div>
   )

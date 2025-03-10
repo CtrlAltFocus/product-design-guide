@@ -50,7 +50,8 @@ export function SectionNav({
             ))}
           </div>
 
-          {/* Chapter navigation */}
+          {/* 
+          // Chapter navigation
           <div className="flex justify-between items-center pt-1 border-t">
             <div>
               {prevChapter && (
@@ -73,7 +74,7 @@ export function SectionNav({
                 </Button>
               )}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
