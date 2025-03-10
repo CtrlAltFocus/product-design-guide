@@ -7,6 +7,7 @@ import type { Chapter } from "@/lib/chapters"
 import { Button } from "@/components/ui/button"
 import { CheckCircle, ChevronRight, ChevronLeft } from "lucide-react"
 import { SectionNav } from "@/components/section-nav"
+import { useTheme } from "next-themes"
 
 interface ChapterContentProps {
   chapter: Chapter
@@ -26,6 +27,8 @@ export function ChapterContent({
   nextChapter,
 }: ChapterContentProps) {
   const [activeSection, setActiveSection] = useState<string>("what")
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === "dark"
 
   const whatRef = useRef<HTMLDivElement>(null)
   const howRef = useRef<HTMLDivElement>(null)
@@ -88,9 +91,15 @@ export function ChapterContent({
     return () => window.removeEventListener("scroll", handleScroll)
   }, [activeSection])
 
+  const gradientStyle = {
+    background: isDark 
+      ? 'linear-gradient(to bottom, hsl(var(--background)) 70%, transparent 100%)' 
+      : 'linear-gradient(to bottom, white 70%, transparent 100%)'
+  }
+
   return (
     <div className="chapter-container">
-      <div className="sticky top-[50px] z-10 py-4 pb-10 -mb-5" style={{ background: 'linear-gradient(to bottom, white 70%, transparent 100%)' }}>
+      <div className="sticky top-[50px] z-10 py-4 pb-10 -mb-5" style={gradientStyle}>
         <div className="flex items-center justify-between">
           <h2 className="text-3xl font-bold tracking-tight">
             {chapter.number}. {chapter.title}

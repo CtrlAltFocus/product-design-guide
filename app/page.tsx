@@ -70,7 +70,7 @@ export default function Home() {
                     <div className="flex-none">
                       <div
                         className={`flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium ${
-                          isCompleted ? "bg-primary text-primary-foreground group-hover:bg-blue-700" : "bg-muted group-hover:bg-gray-200"
+                          isCompleted ? "bg-primary text-primary-foreground group-hover:bg-blue-700" : "bg-muted group-hover:bg-muted/80 dark:group-hover:bg-muted/60"
                         }`}
                       >
                         {chapter.number}
@@ -89,7 +89,7 @@ export default function Home() {
                       className={`h-1.5 w-1.5 rounded-full ${isCompleted ? "bg-primary" : "bg-muted-foreground/0"}`}
                     />
 
-                    <Button variant="ghost" className={`gap-2 text-sm hover:text-primary ${isCompleted ? "group-hover:bg-blue-100" : "group-hover:bg-gray-100"}`} asChild>
+                    <Button variant="ghost" className={`gap-2 text-sm hover:text-primary ${isCompleted ? "group-hover:bg-primary/10" : "group-hover:bg-secondary"}`} asChild>
                       <div>
                         Read chapter
                         <ChevronRight className="h-4 w-4" />
