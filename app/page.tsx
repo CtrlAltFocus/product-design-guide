@@ -1,101 +1,106 @@
-import Image from "next/image";
+"use client"
+
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import { Progress } from "@/components/ui/progress"
+import { Button } from "@/components/ui/button"
+import { ChevronRight, CheckCircle } from "lucide-react"
+import { chapters } from "@/lib/chapters"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { Search } from "@/components/search"
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [completedChapters, setCompletedChapters] = useState<string[]>([])
+  const [progress, setProgress] = useState(0)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    // Load progress from localStorage if available
+    const savedProgress = localStorage.getItem("pdp-guide-progress")
+    if (savedProgress) {
+      const parsed = JSON.parse(savedProgress)
+      setCompletedChapters(parsed)
+      setProgress((parsed.length / chapters.length) * 100)
+    }
+  }, [])
+
+  const selectChapter = (chapterId: string) => {
+    window.location.href = `/guide?chapter=${chapterId}`
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 items-center justify-between">
+          <div className="flex items-baseline gap-2">
+            <h1 className="text-lg font-semibold tracking-tight">Product Design Process</h1>
+            <span className="text-sm text-muted-foreground">for Solo Founders</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="w-32 md:w-48">
+              <Progress value={progress} className="h-2" />
+              <p className="text-xs text-muted-foreground mt-1 text-center">{Math.round(progress)}% Complete</p>
+            </div>
+            <Search onSelectChapter={selectChapter} />
+            <ThemeToggle />
+          </div>
+        </div>
+      </header>
+
+      <main className="container py-10 md:py-16">
+        <div className="text-center space-y-4 mb-16 md:mb-24">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Product Design Process</h1>
+          <p className="text-lg text-muted-foreground max-w-[800px] mx-auto">
+            A step-by-step guide for solo founders to design successful products with confidence, overcoming self-doubt,
+            perfectionism, and fear of failure.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {chapters.map((chapter) => {
+            const isCompleted = completedChapters.includes(chapter.id)
+
+            return (
+              <div
+                key={chapter.id}
+                className={`group relative border rounded-lg p-6 transition-colors ${
+                  isCompleted ? "border-primary/50 bg-primary/5" : "hover:border-primary"
+                }`}
+              >
+                <div className="flex items-start gap-4">
+                  <div className="flex-none">
+                    <div
+                      className={`flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium ${
+                        isCompleted ? "bg-primary text-primary-foreground" : "bg-muted"
+                      }`}
+                    >
+                      {chapter.number}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-lg font-semibold tracking-tight">{chapter.title}</h2>
+                      {isCompleted && <CheckCircle className="h-4 w-4 text-primary" />}
+                    </div>
+                    <p className="text-sm text-muted-foreground">{chapter.what}</p>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center justify-between">
+                  <div
+                    className={`h-1.5 w-1.5 rounded-full ${isCompleted ? "bg-primary" : "bg-muted-foreground/20"}`}
+                  />
+                  <Button variant="ghost" className="gap-2 text-sm" asChild>
+                    <Link href={`/guide?chapter=${chapter.id}`}>
+                      Read chapter
+                      <ChevronRight className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
-  );
+  )
 }
+
