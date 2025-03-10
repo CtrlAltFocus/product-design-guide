@@ -30,7 +30,7 @@ export const chapters: Chapter[] = [
     id: "briefing",
     number: 1,
     title: "Briefing",
-    what: "Run a focused solo session to write a clear project brief that defines the vision, objectives, and essential requirements. Seek feedback from friends, advisors, or potential users to refine the vision and identify blind spots.",
+    what: "Run a focused session to write a clear project brief that defines the vision, objectives, and essential requirements. Seek feedback from friends, advisors, or potential users to refine the vision and identify blind spots.",
     how: "Sit down alone with a notebook or digital tool and articulate what your startup is about (the vision), what problem it solves (the objectives), who it's for (the target audience), and what success looks like (essential requirements). Then, share this brief with a small, trusted group—friends, mentors, or potential users—and ask for their honest input. Use their feedback to adjust and clarify your plan.",
     why: {
       intro: "Why is this step necessary? Let's break it down with the 5 Whys:",
@@ -48,7 +48,7 @@ export const chapters: Chapter[] = [
         {
           question: "Why might I waste time and resources?",
           answer:
-            "Because, as a solo founder, it's easy to get sidetracked by exciting ideas or feedback without a clear focus, leading to scope creep.",
+            "Because, as a new founder, it's easy to get sidetracked by exciting ideas or feedback without a clear focus, leading to scope creep.",
         },
         {
           question: "Why is scope creep a problem?",
@@ -107,7 +107,7 @@ export const chapters: Chapter[] = [
         {
           question: "Why is it hard to predict needs without research?",
           answer:
-            "Your perspective as a solo founder might be biased or limited, missing the complexity of user experiences.",
+            "Your perspective as a new founder might be biased or limited, missing the complexity of user experiences.",
         },
       ],
       conclusion:
@@ -229,18 +229,18 @@ export const chapters: Chapter[] = [
     id: "decision-matrix",
     number: 5,
     title: "Decision Matrix",
-    what: "Use a weighted scoring system or impact vs. effort matrix to prioritize features. Consider feasibility as a solo founder and focus on high-value features that align with user needs and MVP simplicity.",
+    what: "Use a weighted scoring system or impact vs. effort matrix to prioritize features. Consider feasibility as a new founder and focus on high-value features that align with user needs and MVP simplicity.",
     how: "List all potential features, then score each based on impact (how much it solves the user's problem, 1–10) and effort (how hard it is to build alone, 1–10). Pick features with high impact and low effort for your MVP, saving others for later.",
     why: {
       intro: "Why is a decision matrix necessary?",
       whys: [
         {
           question: "Why do I need to prioritize features?",
-          answer: "Because you can't build everything at once with limited solo resources.",
+          answer: "Because you can't build everything at once with limited resources.",
         },
         {
           question: "Why are resources limited?",
-          answer: "Your time, money, and energy are finite as a solo founder.",
+          answer: "Your time, money, and energy are finite as a new founder.",
         },
         {
           question: "Why is focusing on what matters important?",
@@ -295,7 +295,7 @@ export const chapters: Chapter[] = [
         },
         {
           question: "Why is cost-saving important?",
-          answer: "As a solo founder, you need to conserve time and money.",
+          answer: "As a new founder, you need to conserve time and money.",
         },
         {
           question: "Why is efficiency crucial?",
@@ -480,7 +480,7 @@ export const chapters: Chapter[] = [
         },
         {
           question: "Why is saving resources crucial?",
-          answer: "As a solo founder, you need to stay efficient.",
+          answer: "As a new founder, you need to stay efficient.",
         },
         {
           question: "Why is efficiency key?",
@@ -521,10 +521,10 @@ export const chapters: Chapter[] = [
         },
         {
           question: "Why is reducing complexity key?",
-          answer: "Complex systems are harder to manage solo.",
+          answer: "Complex systems are harder to manage when you're just starting out.",
         },
         {
-          question: "Why is solo management a concern?",
+          question: "Why is managing everything yourself a concern?",
           answer: "You'll handle fixes and updates yourself.",
         },
         {
@@ -566,7 +566,7 @@ export const chapters: Chapter[] = [
         },
         {
           question: "Why is avoiding burnout crucial?",
-          answer: "Your energy is limited as a solo founder.",
+          answer: "Your energy is limited as a new founder.",
         },
         {
           question: "Why is energy important?",
