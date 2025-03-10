@@ -208,13 +208,13 @@ export function ChapterContent({
           <div className="space-y-6">
             {chapter.sequence.after && (
               <div>
-                <p className="font-medium">Previous step: <em>&ldquot;{prevChapterName}&rdquot;</em></p>
+                <p className="font-medium">Previous step: <em>&quot;{prevChapterName}&quot;</em></p>
                 <p className="text-muted-foreground mt-1">{chapter.sequence.after}</p>
               </div>
             )}
             {chapter.sequence.before && (
               <div>
-                <p className="font-medium">Next step: <em>&ldquot;{nextChapterName}&rdquot;</em></p>
+                <p className="font-medium">Next step: <em>&quot;{nextChapterName}&quot;</em></p>
                 <p className="text-muted-foreground mt-1">{chapter.sequence.before}</p>
               </div>
             )}
